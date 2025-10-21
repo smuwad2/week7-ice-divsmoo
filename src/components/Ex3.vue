@@ -14,7 +14,13 @@ export default {
     },
     methods: {
         addPost(){
-            axios.get(`${this.baseUrl}/addPost`,)//ur telling vue engine to evaluate of baseUrl and will be replaced with its actual value 
+            axios.get(`${this.baseUrl}/addPost`,{ //ur telling vue engine to evaluate of baseUrl and will be replaced with its actual value 
+                params: {
+                    'subject': this.subject,
+                    'entry': this.entry,
+                    'mood': this.selMood
+                }
+            })
         }
     }
 
