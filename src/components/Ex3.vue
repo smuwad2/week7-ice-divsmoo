@@ -1,52 +1,69 @@
 <script>
+import axios from 'axios';
+
 export default {
+  data() {
+    return {
+      subject: '',
+      entry: '',
+      selMood: 'Angry' 
+    };
+  },
 
-    // add code here
-    computed: {
-        baseUrl() {
-            if (window.location.hostname == 'localhost') //when running on vscode
-                return 'http://localhost:3000'
-            else {
-                const codespace_host = window.location.hostname.replace('5173', '3000') //when running on codespace
-                return `https://${codespace_host}`;
-            }
-        }
-    },
-    methods: {
-        addPost(){
-            axios.get(`${this.baseUrl}/addPost`,{ //ur telling vue engine to evaluate of baseUrl and will be replaced with its actual value 
-                params: {
-                    'subject': this.subject,
-                    'entry': this.entry,
-                    'mood': this.selMood
-                }
-            })
-        }
+  computed: {
+    baseUrl() {
+      if (window.location.hostname === 'localhost') {
+        return 'http://localhost:3000';
+      } else {
+        const codespace_host = window.location.hostname.replace('5173', '3000');
+        return `https://${codespace_host}`;
+      }
     }
+  },
 
-}
+  methods: {
+    addPost() {
+      axios.get(`${this.baseUrl}/addPost`, {
+        params: {
+          subject: this.subject,
+          entry: this.entry,
+          mood: this.selMood
+        }
+      }).catch(err => {
+        console.error('addPost error', err);
+      });
+    }
+  }
+};
 </script>
 
 <template>
-    <div class="table m-2">
-        <h3>Add a New Blog Post</h3>
+  <div class="table m-2">
+    <h3>Add a New Blog Post</h3>
 
-        Subject: <input type='text' size='30' v-model='subject' required>
-        <br>
+    Subject:
+    <input type="text" size="30" v-model="subject" required />
+    <br />
 
-        Entry: <br>
-        <textarea name='entry' cols='80' rows='5' v-model='entry' required></textarea>
-        <br>
+    Entry:
+    <br />
+    <textarea name="entry" cols="80" rows="5" v-model="entry" required></textarea>
+    <br />
 
-        Mood:
-        <!-- TODO: Build a dropdown list here for selecting the mood -->
+    Mood:
+    <select v-model="selMood">
+      
+      <option value="Angry">Angry</option>
+      <option value="Sad">Sad</option>
+      <option value="Happy">Happy</option>
+      <option value="Neutral">Neutral</option>
+    </select>
+    <br /><br />
 
-        <br>
+   
+    <button @click="addPost">Submit New Post</button>
 
-        <br>
-        <button>Submit New Post</button>
-
-        <hr> Click <a><router-link to="/ViewPosts/">here</router-link></a> to return to Main Page
-
-    </div>
+    <hr />
+    Click <router-link to="/ViewPosts/">here</router-link> to return to Main Page
+  </div>
 </template>
